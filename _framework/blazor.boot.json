@@ -1,5 +1,5 @@
 {
-  "cacheBootResources": true,
+  "cacheBootResources": false,
   "config": [ ],
   "debugBuild": false,
   "entryAssembly": "DxGridPerf",
@@ -66,7 +66,7 @@
     "pdb": null,
     "runtime": {
       "dotnet.wasm": "sha256-qUhgve+80Xc4EIDgHhHFKd9isV5eO+3U0y8ydLADj64=",
-      "dotnet.5.0.1.js": "sha256-m2qSGzYaX2tu/hY4n2E8TaDApSgWswqsu/hS8ROgB1k="
+      "dotnet.5.0.1.js": "sha256-SWZOE2EsCqc\/7dPgJrcFqUvVvdeJ9cipeZ2NFMC9v2s="
     },
     "satelliteResources": null
   }
