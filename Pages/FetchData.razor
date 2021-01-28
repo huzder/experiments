@@ -1,0 +1,95 @@
+﻿@page "/fetchdata"
+
+@using grid_handle_prerender.Data
+@inject WeatherForecastService ForecastService
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+<TestParameters Param1=@Param1 />
+
+<TestParameters Param2=@Param2 />
+
+<TestParameters Param3=@Param3 />
+
+<TestParameters Param4=@Param4 />
+
+
+<button @onclick=@ChangeParam1 >Change Param1</button>
+<button @onclick=@Refresh >Refresh</button>
+<div>
+    @(++counter)
+</div>
+@{
+    __builder.OpenComponent<SimpleClassComponent>(1001);
+    __builder.CloseComponent();
+    __builder.OpenComponent<SimpleStructComponent>(1002);
+    __builder.CloseComponent();
+    __builder.OpenComponent<SimpleStructComponent>(1003);
+    __builder.SetKey(Param4);
+    __builder.CloseComponent();
+}
+@code {
+
+    public class SimpleClassComponent : IComponent {
+        RenderHandle handle;
+        public void Attach(RenderHandle handle) {
+            this.handle = handle;
+        }
+
+       public static readonly RenderFragment Block = (builder) => {
+                builder.OpenElement(0, "p");
+                builder.OpenComponent<SimpleStructComponent>(1);
+                builder.CloseComponent();
+                builder.CloseElement();
+            };
+        public Task SetParametersAsync(ParameterView view) {
+            this.handle.Render(Block);
+            return Task.CompletedTask;
+        }
+    }
+
+    public readonly struct SimpleStructComponent : IComponent {
+        
+       public static readonly RenderFragment Block = (builder) => {
+                Console.WriteLine("SimpleStructComponent RenderFragment");
+                builder.OpenElement(0, "p");
+                builder.AddContent(1, "SimpleStructComponent");
+                builder.CloseElement();
+            };
+        public void Attach(RenderHandle handle) {
+            Console.WriteLine("SimpleStructComponent Attach");
+            handle.Dispatcher.InvokeAsync(() => {
+                Console.WriteLine("SimpleStructComponent Render");
+                handle.Render(Block);
+            });
+        }
+        public Task SetParametersAsync(ParameterView view) {
+            Console.WriteLine("SimpleStructComponent SetParametersAsync");
+            return Task.CompletedTask;
+        }
+    }
+    private WeatherForecast[] forecasts;
+
+    int counter = 0;
+    long Param4 = 1000;
+    int Param1 = 100;
+    TestParameters.ComplexParameter Param2 = new TestParameters.ComplexParameter(100);
+    TestParameters.RecordParameter Param3 = new TestParameters.RecordParameter(100);
+    void ChangeParam1() {
+        Console.WriteLine("ChangeParam");
+        Param4++;
+        Param1++;
+        Param2 = new TestParameters.ComplexParameter(Param1);
+        Param3 = new TestParameters.RecordParameter(Param1);
+    }
+    void Refresh() {
+        Console.WriteLine("Refresh");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+    }
+}

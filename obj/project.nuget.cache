@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "dgSpecHash": "HzcgSaOOTxvLdUeQ3R6wxUofWNweq2EnB7x0kVJwEwmvDM0rSUEkjCdUD9qG92CA77G2tmWltWX/NbzyNEdQgA==",
+  "success": true,
+  "projectFilePath": "/Users/akorenchikov/Development/blazor-projects/grid-handle-prerender/grid-handle-prerender.csproj",
+  "expectedPackageFiles": [
+    "/Users/akorenchikov/.nuget/packages/devexpress.blazor/20.2.4/devexpress.blazor.20.2.4.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/devextreme.aspnet.data/2.7.2/devextreme.aspnet.data.2.7.2.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.aspnetcore.authorization/3.1.7/microsoft.aspnetcore.authorization.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.aspnetcore.components/3.1.7/microsoft.aspnetcore.components.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.aspnetcore.components.analyzers/3.1.7/microsoft.aspnetcore.components.analyzers.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.aspnetcore.components.forms/3.1.7/microsoft.aspnetcore.components.forms.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.aspnetcore.components.web/3.1.7/microsoft.aspnetcore.components.web.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.aspnetcore.metadata/3.1.7/microsoft.aspnetcore.metadata.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.csharp/4.4.0/microsoft.csharp.4.4.0.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.extensions.dependencyinjection/3.1.7/microsoft.extensions.dependencyinjection.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/3.1.7/microsoft.extensions.dependencyinjection.abstractions.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.extensions.logging.abstractions/3.1.7/microsoft.extensions.logging.abstractions.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.extensions.options/3.1.7/microsoft.extensions.options.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.extensions.primitives/3.1.7/microsoft.extensions.primitives.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.jsinterop/3.1.7/microsoft.jsinterop.3.1.7.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/microsoft.jsinterop.webassembly/3.2.1/microsoft.jsinterop.webassembly.3.2.1.nupkg.sha512",
+    "/Users/akorenchikov/.nuget/packages/newtonsoft.json/11.0.1/newtonsoft.json.11.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

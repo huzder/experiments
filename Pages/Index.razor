@@ -1,0 +1,67 @@
+@using DevExpress.Blazor
+@using DevExtreme.AspNet.Data
+@using DevExtreme.AspNet.Data.ResponseModel
+@using System.ComponentModel.DataAnnotations
+@using System.Threading
+@using System.Threading.Tasks
+@implements IDisposable
+@page "/"
+<DxDataGrid CustomData="@LoadSurveysAsync"
+            T="SurveySmallDto"
+            KeyFieldName=@nameof(SurveySmallDto.Id)
+            DataNavigationMode="DataGridNavigationMode.VirtualScrolling"
+            PageSize="25"
+            ShowDetailRow="true"
+            AutoCollapseDetailRow="true"
+            AllowColumnDragDrop="false"
+            AllowSort="false"
+            ShowColumnHeaders="false"
+            CssClass="survey-grid">
+    <Columns>
+        <DxDataGridColumn Field=@nameof(SurveySmallDto.Id) />
+        <DxDataGridColumn Field=@nameof(SurveySmallDto.Field1) />
+    </Columns>
+</DxDataGrid> 
+@code {
+    readonly TaskCompletionSource attachTcs; 
+    public Index() {
+        attachTcs = new TaskCompletionSource();
+    }
+
+    async Task<LoadResult> LoadSurveysAsync(DataSourceLoadOptionsBase options, CancellationToken ct = default) {
+        try {
+            Console.WriteLine("LoadSurveysAsync: wait attach");
+            await attachTcs.Task;
+            await Task.Delay(400);
+            Console.WriteLine("LoadSurveysAsync: fetch data");
+            return DataSourceLoader.Load(Enumerable.Range(0, 1000).Select(i => SurveySmallDto.Create(i)), options);
+        } catch(OperationCanceledException) {
+            Console.WriteLine("LoadSurveysAsync: catch cancel");
+            throw;
+        }
+    }
+    protected override void OnAfterRender(bool firstRender) {
+        if(firstRender) {
+            Console.WriteLine("OnAfterRender: attach");
+            attachTcs.TrySetResult();
+        }
+    }
+    public void Dispose() {
+        Console.WriteLine("Dispose: throw cancel");
+        attachTcs.TrySetCanceled();
+    }
+
+    
+    class SurveySmallDto {
+        [Key]
+        public int Id { get; set; }
+        public string Field1 { get; set; }
+
+        public static SurveySmallDto Create(int id) {
+            return new SurveySmallDto() {
+                Id = id,
+                Field1 = $"Field1 = {id}"
+            };
+        }
+    }
+}

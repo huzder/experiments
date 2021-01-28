@@ -1,0 +1,4 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="_content/DevExpress.Blazor" Path="/Users/akorenchikov/.nuget/packages/devexpress.blazor/20.2.4/build/../staticwebassets/" />
+  <ContentRoot BasePath="/" Path="/Users/akorenchikov/Development/blazor-projects/grid-handle-prerender/obj/Debug/net5.0/scopedcss/bundle/" />
+</StaticWebAssets>

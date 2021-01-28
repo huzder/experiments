@@ -1,0 +1,63 @@
+@using grid_handle_prerender.Pages
+<div>
+    Render count: @(++counter)
+    Param1: @Param1
+    Param2: @Param2
+    Param3: @Param3
+    Param4: @Param4
+</div>
+@code {
+    int counter = 0;
+    [Parameter] public int Param1 { get; set; }
+    [Parameter] public long Param4 { get; set; }
+    [Parameter] public ComplexParameter Param2 { get; set; }
+    [Parameter] public RecordParameter Param3 { get; set; }
+    [CascadingParameter] public FetchData Owner { get; set; } 
+
+    public override async Task SetParametersAsync(ParameterView view) {
+        await base.SetParametersAsync(view);
+        Console.WriteLine("SetParametersAsync called { Param1: " + 
+            Param1.ToString() + ", Param2 = " + 
+            Param2.ToString() + ", Param3 = " + 
+            Param3?.ToString() + ", Param4 = " + 
+            Param4.ToString() + ", counter = " + 
+            counter.ToString() + "}");
+    }
+
+    public record RecordParameter {
+        public int Field1 { get; }
+        public RecordParameter(int field1) => Field1 = field1;
+    }
+    public readonly struct ComplexParameter : IEquatable<ComplexParameter>, IComparable<ComplexParameter> {
+        public int Field1 { get; }
+
+        public ComplexParameter(int field1) {
+            Field1 = field1;
+        }
+
+        public override string ToString()
+        {
+            return "{ Field1: " + Field1.ToString() + " }";
+        }
+
+        public override int GetHashCode()
+        {
+            return Field1.GetHashCode();
+        }
+        public override bool Equals(object obj) {
+            return obj is ComplexParameter other && other.Equals(this);
+        }
+        public bool Equals(ComplexParameter other) {
+            return Field1 == other.Field1;
+        }
+        public static bool operator  ==(ComplexParameter left, ComplexParameter right) {
+            return left.Field1 == right.Field1;
+        } 
+        public static bool operator  !=(ComplexParameter left, ComplexParameter right) {
+            return !(left == right);
+        }
+        public int CompareTo(ComplexParameter other) {
+            return Comparer<int>.Default.Compare(Field1, other.Field1);   
+        }
+    }    
+}
