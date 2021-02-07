@@ -1,0 +1,83 @@
+@using Microsoft.AspNetCore.WebUtilities
+@implements IAsyncDisposable
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@(StylesheetLinkContainer(
+    new AffectedAreaContext(
+            owner: this,
+            toggleButton: 
+                    ToggleButton(new ToggleButtonContainerContext(this)),
+            themesSelectorContainer: 
+                    ThemesSelectorContainer(new ThemesSelectorContainerContext(
+                        visible: themesVisible,
+                        fragment: 
+                            @<div class="card list-group list-group-flush">
+                                    @foreach(var themesGroup in GroupedThemes) {
+                                        <h6 class="card-header list-group-item">@themesGroup.Key</h6>
+                                        @foreach (var theme in themesGroup.Value)
+                                        {
+                                            <a class="list-group-item list-group-item-action" href=@GetUrlWithSpecifiedTheme(theme)>
+                                                @theme
+                                            </a>
+                                        }
+                                    }
+                            </div>))
+        )
+))
+@code {
+    static readonly Dictionary<string, string[]> GroupedThemes = new () {
+        ["Color"] = new [] { "Default" },
+        ["DevExpress"] = new [] {
+            "Blazing Berry", "Purple", "Office White"
+        },
+        ["Bootswatch"] = new [] {
+            "Flatly", "Cosmo"
+        }    
+    };
+    
+    bool themesVisible;
+    string appliedTheme;
+    [Parameter] public string Theme { get; set; }
+    [Parameter] public RenderFragment<ToggleButtonContainerContext> ToggleButton { get; set; }
+    [Parameter] public RenderFragment<ThemesSelectorContainerContext> ThemesSelectorContainer { get; set; } 
+        =  (c) => b =>  {
+            if(c.ThemesSelectorVisible)
+                c.ThemesSelectorView(b);
+        };
+    [Parameter] public RenderFragment<AffectedAreaContext> StylesheetLinkContainer { get; set; }
+    readonly JSModuleSource _jsModule = new JSModuleSource();
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if(firstRender)
+            await _jsModule.Attach(JSRuntime);
+    }
+    string GetUrlWithSpecifiedTheme(string themeName) {
+        var uri = new Uri(NavigationManager.Uri);
+        var queryParts = QueryHelpers.ParseNullableQuery(uri.Query) ?? new ();
+        queryParts[nameof(Theme)] = themeName;
+        return QueryHelpers.AddQueryString(uri.LocalPath, queryParts);
+    }
+    protected override void OnInitialized() {
+        NavigationManager.LocationChanged += OnLocationChanged;
+        SyncThemeParameter();
+        appliedTheme = Theme;
+    }
+    protected bool SyncThemeParameter() {
+        Theme = QueryHelpers.ParseNullableQuery(new Uri(NavigationManager.Uri).Query)?.GetValueOrDefault(nameof(Theme)) ?? "default";
+        return Theme != appliedTheme;
+    }
+    public  ValueTask DisposeAsync() {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+        return _jsModule.DisposeAsync();
+    }
+    void OnLocationChanged(object sender, LocationChangedEventArgs args) {
+        if(SyncThemeParameter()) {
+            var theme = Theme ?? "default";
+            InvokeAsync(async () => {
+                await _jsModule.PrepareInstantLoadAsync($"/themes/{theme}/bootstrap.min.css");
+                appliedTheme = theme;
+                StateHasChanged();
+            });
+        }
+    }
+
+}

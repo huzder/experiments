@@ -1,0 +1,39 @@
+@inherits LayoutComponentBase
+
+            <ThemeSwitcher >
+                <StylesheetLinkContainer Context="themeSwitcher">
+                    <link rel="stylesheet" href=@themeSwitcher.CurrentThemeUrl />
+                    <div class="page" 
+                                @onclick=@themeSwitcher.HideThemesContainer
+                                @onkeypress=@((e) => { if(e.Key == "esc") themeSwitcher.HideThemesContainer(); })>
+                        <div class="sidebar">
+                            <NavMenu />
+                        </div>
+                        <div class="main">
+                            <div class="top-row px-4" >
+                                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                                @themeSwitcher.ToggleButton
+                            </div>
+                            <div class="d-flex">
+                                @themeSwitcher.ThemesSelectorContainer
+                            </div>
+                            <div class="content px-4">
+                                @Body
+                            </div>
+                        </div>
+                    </div>
+
+                </StylesheetLinkContainer>
+                <ToggleButton>
+                    <button class="btn btn-link nav-link dropdown-toggle" type="button" @onclick=@context.ToggleThemesContainer @onclick:stopPropagation=true>
+                        @context.CurrentTheme
+                    </button>
+                </ToggleButton>
+                <ThemesSelectorContainer Context="content">
+                    @if(content.ThemesSelectorVisible) {
+                        <div class="ml-auto">
+                            @content.ThemesSelectorView
+                        </div>
+                    }
+                </ThemesSelectorContainer>
+            </ThemeSwitcher>
